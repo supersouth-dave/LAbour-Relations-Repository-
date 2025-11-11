@@ -1,0 +1,490 @@
+import React, { useState } from 'react';
+import { BookOpen, Scale, Users, AlertCircle, MessageSquare, Gavel, TrendingUp, FileText, ChevronRight, Home, Search, Star, Zap, Shield, Target } from 'lucide-react';
+
+const LabourRelationsApp = () => {
+  const [currentPage, setCurrentPage] = useState('cover');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedSections, setExpandedSections] = useState({});
+
+  const toggleSection = (id) => {
+    setExpandedSections(prev => ({...prev, [id]: !prev[id]}));
+  };
+
+  const sections = [
+    {
+      id: 'disputes',
+      title: 'Disputes: Rights vs Interest',
+      icon: Scale,
+      color: 'from-purple-500 to-pink-500',
+      content: {
+        interest: {
+          title: 'Dispute of Interest',
+          points: [
+            'Occurs when negotiations fail',
+            'No clear right on either side',
+            'Decided by power play (strike/lockout)',
+            'Cooling-off period required',
+            'Settlement: conciliation → mediation → strike',
+          ],
+          examples: ['Reducing hours from 42 to 40/week', 'Demanding discounted lunches']
+        },
+        right: {
+          title: 'Dispute of Right',
+          points: [
+            'One party believes their right was infringed',
+            'Must try to resolve first',
+            'Settled by arbitration or adjudication',
+            'NO strikes or lockouts allowed',
+            'Use law to decide infringement',
+          ],
+          examples: ['Maternity leave refusal', 'Harassment resignation', 'Age discrimination dismissal']
+        },
+        analogy: '🎯 Tug-of-war with no rulebook = INTEREST. Showing the ref your contract = RIGHT.'
+      }
+    },
+    {
+      id: 'mechanisms',
+      title: 'Dispute Settlement Mechanisms',
+      icon: Gavel,
+      color: 'from-green-400 to-cyan-500',
+      content: {
+        methods: [
+          {
+            name: 'Conciliation',
+            desc: 'Third party brings parties together, no interference',
+            when: 'Good relationship, low conflict',
+            emoji: '🤝'
+          },
+          {
+            name: 'Mediation',
+            desc: 'Third party actively suggests solutions',
+            when: 'Both serious about settling, not extreme conflict',
+            emoji: '💡'
+          },
+          {
+            name: 'Advisory Arbitration',
+            desc: 'Decision made but not binding',
+            when: 'Testing waters before final decision',
+            emoji: '📋'
+          },
+          {
+            name: 'Arbitration',
+            desc: 'Binding decision by third party',
+            when: 'High conflict, principle matters, rapid settlement needed',
+            emoji: '⚖️'
+          },
+          {
+            name: 'Adjudication',
+            desc: 'Court decides and issues order',
+            when: 'Legal rights violated, formal ruling needed',
+            emoji: '🏛️'
+          }
+        ],
+        flow: 'Chat → Nudge → Opinion → Rule → Gavel'
+      }
+    },
+    {
+      id: 'procedures',
+      title: 'Dispute Settlement Procedures',
+      icon: FileText,
+      color: 'from-yellow-400 to-orange-500',
+      content: {
+        plantLevel: [
+          'Company policy first ("house rules")',
+          'Declare dispute → reply in 48hrs',
+          'Conciliation meetings',
+          'Internal arbitration option',
+          'Contract out of LRA if agreed'
+        ],
+        statutory: [
+          '30-day clock to CCMA after dispute',
+          'Conciliation first (30 days)',
+          'Certificate if unresolved',
+          'Rights → arbitration/adjudication',
+          'Interest → legal strike allowed'
+        ]
+      }
+    },
+    {
+      id: 'actions',
+      title: 'Labour Actions & Dismissals',
+      icon: AlertCircle,
+      color: 'from-red-400 to-pink-500',
+      content: {
+        rules: [
+          '✅ Strikes ONLY in interest disputes (post-conciliation)',
+          '❌ NO strikes in rights disputes',
+          'Unfair dismissal → CCMA within 30 days',
+          'Employer has onus of proof',
+          'Remedies: reinstatement first, then compensation (12-24 months)'
+        ],
+        flow: 'Fired Monday → CCMA by month-end → conciliate → arbitrate → reinstate if unfair'
+      }
+    },
+    {
+      id: 'conflict',
+      title: 'Sources of Conflict',
+      icon: TrendingUp,
+      color: 'from-indigo-500 to-purple-600',
+      content: {
+        sources: [
+          '🎯 Different needs, goals, values',
+          '📦 Inadequate resources',
+          '💬 Poor communication',
+          '🤐 Lack of trust',
+          '👁️ Preconceived perceptions',
+          '⚡ Power abuse',
+          '🚫 No conflict resolution structures'
+        ],
+        example: 'Factory cuts tea breaks (efficiency vs fairness) + no consultation = wildcat strike'
+      }
+    },
+    {
+      id: 'communication',
+      title: 'Communication & Barriers',
+      icon: MessageSquare,
+      color: 'from-cyan-400 to-blue-500',
+      content: {
+        definition: 'Transactional process creating understanding between sender and receiver (verbal/non-verbal, written/oral)',
+        barriers: [
+          '🗣️ Language & cognitive differences',
+          '📱 Wrong communication method',
+          '🧠 Receiver\'s mental set',
+          '👥 Relationship & status differences',
+          '📢 Sender credibility issues',
+          '🔊 Physical barriers (noise, distance)'
+        ],
+        listening: 'Ears on, mouth off, brain replaying. Paraphrase back: "So you\'re saying...?"'
+      }
+    },
+    {
+      id: 'exam',
+      title: 'Exam Strategy Guide',
+      icon: Target,
+      color: 'from-pink-500 to-rose-500',
+      content: {
+        golden: [
+          '✅ Start with "You" (boss)',
+          '✅ Use exact dates/names from case',
+          '✅ Split notice vs advice',
+          '✅ Be unique to the case',
+          '❌ NEVER quote LRA sections',
+          '❌ NO general examples',
+          '❌ NO copy-paste from textbook'
+        ],
+        timing: '20-mark Q = 15 mins | 10-mark Q = 7 mins',
+        format: 'Charge → Explanation → Outcome (4-6 per 20 marks)'
+      }
+    }
+  ];
+
+  const CoverPage = () => (
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-8 relative overflow-hidden">
+      <div className="absolute inset-0 bg-black opacity-20"></div>
+      <div className="absolute top-0 left-0 w-full h-full">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute bg-white rounded-full opacity-10 animate-pulse"
+            style={{
+              width: Math.random() * 100 + 50 + 'px',
+              height: Math.random() * 100 + 50 + 'px',
+              top: Math.random() * 100 + '%',
+              left: Math.random() * 100 + '%',
+              animationDelay: Math.random() * 2 + 's',
+              animationDuration: Math.random() * 3 + 2 + 's'
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="relative z-10 text-center max-w-4xl">
+        <div className="mb-8 flex justify-center gap-4">
+          <Scale className="w-16 h-16 text-white animate-bounce" style={{animationDelay: '0s'}} />
+          <Gavel className="w-16 h-16 text-white animate-bounce" style={{animationDelay: '0.2s'}} />
+          <Shield className="w-16 h-16 text-white animate-bounce" style={{animationDelay: '0.4s'}} />
+        </div>
+        
+        <h1 className="text-7xl font-black text-white mb-6 drop-shadow-2xl">
+          Labour Relations
+        </h1>
+        <h2 className="text-4xl font-bold text-white mb-8 drop-shadow-lg">
+          in Practice
+        </h2>
+        
+        <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-8 mb-8 border-4 border-white/40">
+          <p className="text-2xl text-white font-semibold mb-4">
+            📚 A Hands-on Approach
+          </p>
+          <p className="text-lg text-white/90">
+            Interactive Study Guide | November 2025
+          </p>
+        </div>
+        
+        <button
+          onClick={() => setCurrentPage('content')}
+          className="group bg-white text-purple-600 px-12 py-5 rounded-full text-2xl font-bold shadow-2xl hover:shadow-purple-500/50 hover:scale-110 transition-all duration-300 flex items-center gap-3 mx-auto"
+        >
+          <Zap className="w-8 h-8" />
+          Start Learning
+          <ChevronRight className="w-8 h-8 group-hover:translate-x-2 transition-transform" />
+        </button>
+        
+        <div className="mt-12 flex justify-center gap-8 text-white/80">
+          <div className="flex items-center gap-2">
+            <Star className="w-6 h-6" />
+            <span>Comprehensive</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Zap className="w-6 h-6" />
+            <span>Interactive</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Target className="w-6 h-6" />
+            <span>Exam-Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ContentPage = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 shadow-2xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setCurrentPage('cover')}
+              className="hover:bg-white/20 p-2 rounded-lg transition-all"
+            >
+              <Home className="w-6 h-6" />
+            </button>
+            <BookOpen className="w-8 h-8" />
+            <h1 className="text-3xl font-bold">Labour Relations Guide</h1>
+          </div>
+          
+          <div className="relative">
+            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-300" />
+            <input
+              type="text"
+              placeholder="Search topics..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-white"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Content Grid */}
+      <div className="max-w-7xl mx-auto p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {sections
+            .filter(section => 
+              searchTerm === '' || 
+              section.title.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .map((section, idx) => (
+              <div
+                key={section.id}
+                className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg rounded-3xl p-6 border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
+                style={{animationDelay: `${idx * 0.1}s`}}
+                onClick={() => toggleSection(section.id)}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div className={`bg-gradient-to-br ${section.color} p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform`}>
+                    <section.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-white mb-2">{section.title}</h2>
+                    <ChevronRight className={`w-6 h-6 text-white/60 transition-transform ${expandedSections[section.id] ? 'rotate-90' : ''}`} />
+                  </div>
+                </div>
+
+                {expandedSections[section.id] && (
+                  <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-top-4">
+                    {section.id === 'disputes' && (
+                      <div className="space-y-4">
+                        <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-4 border border-purple-400/30">
+                          <h3 className="text-xl font-bold text-purple-300 mb-3 flex items-center gap-2">
+                            <Scale className="w-5 h-5" />
+                            {section.content.interest.title}
+                          </h3>
+                          <ul className="space-y-2">
+                            {section.content.interest.points.map((p, i) => (
+                              <li key={i} className="text-white/90 flex items-start gap-2">
+                                <span className="text-pink-400">•</span> {p}
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="mt-3 pt-3 border-t border-purple-400/30">
+                            <p className="text-sm text-purple-200">Examples: {section.content.interest.examples.join(' | ')}</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-r from-green-500/20 to-cyan-500/20 rounded-2xl p-4 border border-green-400/30">
+                          <h3 className="text-xl font-bold text-green-300 mb-3 flex items-center gap-2">
+                            <Shield className="w-5 h-5" />
+                            {section.content.right.title}
+                          </h3>
+                          <ul className="space-y-2">
+                            {section.content.right.points.map((p, i) => (
+                              <li key={i} className="text-white/90 flex items-start gap-2">
+                                <span className="text-cyan-400">•</span> {p}
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="mt-3 pt-3 border-t border-green-400/30">
+                            <p className="text-sm text-green-200">Examples: {section.content.right.examples.join(' | ')}</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-yellow-500/20 rounded-2xl p-4 border border-yellow-400/30">
+                          <p className="text-yellow-200 font-semibold">{section.content.analogy}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'mechanisms' && (
+                      <div className="space-y-3">
+                        {section.content.methods.map((method, i) => (
+                          <div key={i} className="bg-gradient-to-r from-green-500/10 to-cyan-500/10 rounded-xl p-4 border border-green-400/20">
+                            <h4 className="text-lg font-bold text-green-300 mb-2 flex items-center gap-2">
+                              <span className="text-2xl">{method.emoji}</span>
+                              {method.name}
+                            </h4>
+                            <p className="text-white/80 text-sm mb-2">{method.desc}</p>
+                            <p className="text-cyan-300 text-sm">When: {method.when}</p>
+                          </div>
+                        ))}
+                        <div className="bg-blue-500/20 rounded-xl p-4 border border-blue-400/30 text-center">
+                          <p className="text-blue-200 font-semibold">📊 {section.content.flow}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'procedures' && (
+                      <div className="space-y-4">
+                        <div className="bg-orange-500/20 rounded-xl p-4 border border-orange-400/30">
+                          <h4 className="text-lg font-bold text-orange-300 mb-3">🏢 Plant-Level</h4>
+                          <ul className="space-y-2">
+                            {section.content.plantLevel.map((item, i) => (
+                              <li key={i} className="text-white/90 text-sm flex items-start gap-2">
+                                <span className="text-orange-400">→</span> {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="bg-yellow-500/20 rounded-xl p-4 border border-yellow-400/30">
+                          <h4 className="text-lg font-bold text-yellow-300 mb-3">⚖️ Statutory (CCMA)</h4>
+                          <ul className="space-y-2">
+                            {section.content.statutory.map((item, i) => (
+                              <li key={i} className="text-white/90 text-sm flex items-start gap-2">
+                                <span className="text-yellow-400">→</span> {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'actions' && (
+                      <div className="space-y-4">
+                        <div className="bg-red-500/20 rounded-xl p-4 border border-red-400/30">
+                          <h4 className="text-lg font-bold text-red-300 mb-3">📜 Rules</h4>
+                          <ul className="space-y-2">
+                            {section.content.rules.map((rule, i) => (
+                              <li key={i} className="text-white/90 text-sm">{rule}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="bg-pink-500/20 rounded-xl p-4 border border-pink-400/30">
+                          <h4 className="text-lg font-bold text-pink-300 mb-2">🔄 Process Flow</h4>
+                          <p className="text-white/90 text-sm">{section.content.flow}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'conflict' && (
+                      <div className="space-y-4">
+                        <div className="bg-indigo-500/20 rounded-xl p-4 border border-indigo-400/30">
+                          <h4 className="text-lg font-bold text-indigo-300 mb-3">Common Sources</h4>
+                          <div className="grid grid-cols-1 gap-2">
+                            {section.content.sources.map((source, i) => (
+                              <div key={i} className="text-white/90 text-sm bg-white/5 rounded-lg p-2">
+                                {source}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-purple-500/20 rounded-xl p-4 border border-purple-400/30">
+                          <p className="text-purple-200 text-sm">💡 {section.content.example}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'communication' && (
+                      <div className="space-y-4">
+                        <div className="bg-cyan-500/20 rounded-xl p-4 border border-cyan-400/30">
+                          <h4 className="text-lg font-bold text-cyan-300 mb-2">Definition</h4>
+                          <p className="text-white/90 text-sm">{section.content.definition}</p>
+                        </div>
+                        <div className="bg-blue-500/20 rounded-xl p-4 border border-blue-400/30">
+                          <h4 className="text-lg font-bold text-blue-300 mb-3">Barriers</h4>
+                          <div className="space-y-2">
+                            {section.content.barriers.map((barrier, i) => (
+                              <p key={i} className="text-white/90 text-sm">{barrier}</p>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-teal-500/20 rounded-xl p-4 border border-teal-400/30">
+                          <h4 className="text-lg font-bold text-teal-300 mb-2">👂 Art of Listening</h4>
+                          <p className="text-white/90 text-sm">{section.content.listening}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 'exam' && (
+                      <div className="space-y-4">
+                        <div className="bg-pink-500/20 rounded-xl p-4 border border-pink-400/30">
+                          <h4 className="text-lg font-bold text-pink-300 mb-3">Golden Rules</h4>
+                          <div className="space-y-2">
+                            {section.content.golden.map((rule, i) => (
+                              <p key={i} className={`text-sm ${rule.startsWith('✅') ? 'text-green-300' : 'text-red-300'}`}>
+                                {rule}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-rose-500/20 rounded-xl p-4 border border-rose-400/30">
+                          <h4 className="text-lg font-bold text-rose-300 mb-2">⏱️ Timing</h4>
+                          <p className="text-white/90 text-sm">{section.content.timing}</p>
+                        </div>
+                        <div className="bg-fuchsia-500/20 rounded-xl p-4 border border-fuchsia-400/30">
+                          <h4 className="text-lg font-bold text-fuchsia-300 mb-2">📝 Format</h4>
+                          <p className="text-white/90 text-sm">{section.content.format}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 mt-12">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-lg font-semibold">🎓 Study Smart, Not Hard</p>
+          <p className="text-sm text-white/80 mt-2">Your Labour Relations Exam Success Starts Here</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  return currentPage === 'cover' ? <CoverPage /> : <ContentPage />;
+};
+
+export default LabourRelationsApp;
